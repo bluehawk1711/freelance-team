@@ -67,8 +67,8 @@ export function Footer() {
             </Text>
             <div className="flex gap-2">
               <FloatingInput label="Email" type="email" className="flex-1" />
-              <Button size="icon" variant="default" className="flex-shrink-0">
-                <Send className="w-4 h-4" />
+              <Button size="icon" variant="default" className="flex-shrink-0" aria-label="Subscribe to newsletter">
+                <Send className="w-4 h-4" aria-hidden="true" />
               </Button>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <Section size="xl" className="relative overflow-hidden">
+    <Section size="xl" className="relative overflow-hidden !py-5">
       {/* Gradient blobs */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-secondary/30 rounded-full blur-3xl opacity-60" />
@@ -70,7 +70,7 @@ export function HeroSection() {
               </div>
 
               {/* Floating stat card */}
-              <div className="absolute -bottom-6 -left-6 bg-card rounded-2xl p-4 shadow-xl border border-border animate-[bounce_4s_infinite]">
+              <div className="absolute -bottom-6 -left-6 bg-card rounded-2xl p-4 shadow-xl border border-border animate-[bounce_4s_infinite]" role="complementary" aria-label="Performance score">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
                     <svg
@@ -78,6 +78,7 @@ export function HeroSection() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
