@@ -28,13 +28,14 @@ export function ThemeToggle() {
 
     const maxDim = Math.max(window.innerWidth, window.innerHeight) * 2.5;
 
+    // Use CSS variable for theme background to stay consistent with globals.css
     overlay.style.cssText = `
       left: ${x}px;
       top: ${y}px;
       width: 0px;
       height: 0px;
       border-radius: 50%;
-      background: ${newTheme === 'dark' ? '#0F172A' : '#FAFBFC'};
+      background: var(--background);
       transform: translate(-50%, -50%);
       transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     `;

@@ -8,7 +8,7 @@ import {
   Heading,
   Text,
   Button,
-  Input,
+  FloatingInput,
   Textarea,
 } from "@/components/ui";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -133,11 +133,8 @@ export function ContactSection() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-foreground">
-                        Name
-                      </label>
-                      <Input
-                        placeholder="John Doe"
+                      <FloatingInput
+                        label="Name"
                         {...register("name")}
                         disabled={isSubmitting}
                       />
@@ -148,12 +145,9 @@ export function ContactSection() {
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-foreground">
-                        Email
-                      </label>
-                      <Input
+                      <FloatingInput
+                        label="Email"
                         type="email"
-                        placeholder="john@company.com"
                         {...register("email")}
                         disabled={isSubmitting}
                       />

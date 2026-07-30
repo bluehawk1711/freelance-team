@@ -52,7 +52,7 @@ export function ProcessSection() {
                   <div className="relative inline-flex mb-6">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
                       {IconComponent && (
-                        <IconComponent className="w-6 h-6 text-white" />
+                        <IconComponent className="w-6 h-6 text-primary-foreground" />
                       )}
                     </div>
                     <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-background border border-border flex items-center justify-center text-[10px] font-bold text-primary">

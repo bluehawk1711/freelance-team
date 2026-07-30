@@ -86,7 +86,7 @@ export function TestimonialsSection() {
                       </Text>
                     </blockquote>
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold text-white shrink-0">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold text-primary-foreground shrink-0">
                         {testimonial.name
                           .split(" ")
                           .map((n) => n[0])

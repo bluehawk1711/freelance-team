@@ -1,8 +1,9 @@
 // Core UI Components (using shadcn)
-export { Button, buttonVariants } from "@/components/ui/button";
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-export { Input } from "@/components/ui/input";
-export { Textarea } from "@/components/ui/textarea";
+export { Button, buttonVariants } from "./button";
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./card";
+export { Input } from "./input";
+export { Textarea } from "./textarea";
+export { FloatingInput } from "./floating-input";
 
 // Custom wrapper components
 export { Container, Section, type ContainerProps, type SectionProps } from "./Container";

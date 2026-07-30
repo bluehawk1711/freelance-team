@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Container, Text, Heading, Input, Button } from "@/components/ui";
+import { Container, Text, Heading, FloatingInput, Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { Send } from "lucide-react";
 
@@ -66,7 +66,7 @@ export function Footer() {
               Subscribe to our newsletter for insights.
             </Text>
             <div className="flex gap-2">
-              <Input type="email" placeholder="Email" className="flex-1" />
+              <FloatingInput label="Email" type="email" className="flex-1" />
               <Button size="icon" variant="default" className="flex-shrink-0">
                 <Send className="w-4 h-4" />
               </Button>

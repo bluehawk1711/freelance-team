@@ -54,29 +54,31 @@ const premiumServices = [
   },
 ];
 
+// Icon background colors using CSS variables from globals.css
 const iconBgColors = [
-  "bg-blue-100 dark:bg-blue-900/40",
-  "bg-violet-100 dark:bg-violet-900/40",
-  "bg-slate-200 dark:bg-slate-700/50",
-  "bg-sky-100 dark:bg-sky-900/40",
-  "bg-indigo-100 dark:bg-indigo-900/40",
-  "bg-rose-100 dark:bg-rose-900/40",
+  "bg-[var(--icon-blue-bg)]",
+  "bg-[var(--icon-teal-bg)]",
+  "bg-[var(--icon-amber-bg)]",
+  "bg-[var(--icon-cyan-bg)]",
+  "bg-[var(--icon-emerald-bg)]",
+  "bg-[var(--icon-rose-bg)]",
 ];
 
+// Icon foreground colors using CSS variables from globals.css
 const iconColors = [
-  "text-blue-600 dark:text-blue-400",
-  "text-violet-600 dark:text-violet-400",
-  "text-slate-700 dark:text-slate-300",
-  "text-sky-600 dark:text-sky-400",
-  "text-indigo-600 dark:text-indigo-400",
-  "text-rose-600 dark:text-rose-400",
+  "text-[var(--icon-blue)]",
+  "text-[var(--icon-teal)]",
+  "text-[var(--icon-amber)]",
+  "text-[var(--icon-cyan)]",
+  "text-[var(--icon-emerald)]",
+  "text-[var(--icon-rose)]",
 ];
 
 export function FeaturedServicesSection() {
   return (
     <Section size="lg" className="relative overflow-hidden" id="services">
-      {/* Dark background - distinct from page bg in both modes */}
-      <div className="absolute inset-0 bg-slate-900 dark:bg-[#080c18]" />
+      {/* Dark background - uses CSS variable for both modes */}
+      <div className="absolute inset-0 bg-[var(--services-bg)]" />
 
       {/* Grain texture overlay */}
       <div
@@ -92,11 +94,11 @@ export function FeaturedServicesSection() {
           <Text
             size="sm"
             weight="semibold"
-            className="uppercase tracking-widest text-blue-400 mb-4"
+            className="uppercase tracking-widest text-[var(--services-subheading)] mb-4"
           >
             Our Expertise
           </Text>
-          <Heading level={2} className="text-white">
+          <Heading level={2} className="text-[var(--services-heading)]">
             Premium Digital Services
           </Heading>
         </div>
@@ -108,20 +110,20 @@ export function FeaturedServicesSection() {
             return (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                className="bg-[var(--services-card)] backdrop-blur-sm rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               >
                 <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl ${iconBgColors[index]}`}>
                   <IconComponent className={`w-6 h-6 ${iconColors[index]}`} />
                 </div>
-                <Heading level={4} className="mb-3 text-slate-900 dark:text-white">
+                <Heading level={4} className="mb-3 text-[var(--services-card-foreground)]">
                   {service.title}
                 </Heading>
-                <Text size="sm" className="text-slate-600 dark:text-slate-300 mb-6">
+                <Text size="sm" className="text-[var(--services-card-muted)] mb-6">
                   {service.description}
                 </Text>
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-[var(--services-link)] hover:underline"
                 >
                   Learn more
                   <span className="text-lg leading-none">&rsaquo;</span>

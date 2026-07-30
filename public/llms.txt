@@ -1,0 +1,36 @@
+# FloatTech - Digital Agency
+
+## About
+FloatTech is a premier digital agency delivering world-class digital experiences. We specialize in web design, development, and digital marketing services.
+
+## Services
+- UI/UX Design: Immersive digital journeys crafted with attention to every micro-interaction
+- Website Design: Bespoke web designs that capture your brand essence
+- Frontend Development: React, Next.js, and Tailwind based architectures
+- Landing Pages: High-impact landing pages for marketing campaigns
+- Business Websites: Scaleable digital platforms for enterprises
+- Website Redesign: Modernizing legacy web applications
+
+## Contact
+- Email: hello@floattech.com
+- Phone: +1 (555) 123-4567
+- Address: 123 Digital Ave, Tech City, TC 12345
+
+## Social
+- Twitter: https://twitter.com/floattech
+- LinkedIn: https://linkedin.com/company/floattech
+- GitHub: https://github.com/floattech
+
+## Technology Stack
+- React 19
+- Next.js 16
+- Tailwind CSS
+- TypeScript
+- Redux Toolkit
+- Framer Motion
+
+## Pages
+- Home: https://floattech.com
+- Services: https://floattech.com/#services
+- Portfolio: https://floattech.com/#portfolio
+- Contact: https://floattech.com/#contact
