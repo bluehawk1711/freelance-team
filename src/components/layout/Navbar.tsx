@@ -125,7 +125,7 @@ export function Navbar() {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-4">
               <ThemeToggleButton
-                variant="circle"
+                variant="polygon"
                 start="center"
                 className="size-9 rounded-full transition-colors duration-200 hover:bg-muted"
               />

@@ -8,8 +8,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const Skiper26 = () => {
-  const [variant, setVariant] = useState<AnimationVariant>("rectangle");
-  const [start, setStart] = useState<AnimationStart>("bottom-up");
+  const [variant, setVariant] = useState<AnimationVariant>("gif");
+  const [start, setStart] = useState<AnimationStart>("bottom-center");
   const [blur, setBlur] = useState<boolean>(false);
   const [gifType, setGifType] = useState<"1" | "2" | "3" | "custom">("1");
   const [gifUrl, setGifUrl] = useState<string>(
