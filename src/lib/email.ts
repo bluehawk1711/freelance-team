@@ -1,23 +1,23 @@
 import nodemailer from "nodemailer";
 
 function getTransport() {
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASSWORD;
+  const user = process.env.GMAIL_EMAIL;
+  const pass = process.env.GMAIL_APP_PASSWORD;
 
   if (!user || !pass) {
-    throw new Error("SMTP_USER and SMTP_PASSWORD must be set");
+    throw new Error("GMAIL_EMAIL and GMAIL_APP_PASSWORD must be set");
   }
 
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: Number(process.env.SMTP_PORT) || 587,
+    host: "smtp.gmail.com",
+    port: 587,
     secure: false,
     auth: { user, pass },
   });
 }
 
 function getFromAddress() {
-  return process.env.SMTP_FROM || "noreply@floattech.com";
+  return process.env.GMAIL_EMAIL || "noreply@floattech.com";
 }
 
 export async function sendContactNotification(data: {

@@ -7,17 +7,17 @@ export const config = {
     name: "FloatTech",
     description:
       "A premier digital agency delivering world-class digital experiences",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
   },
   social: {
     twitter: "https://twitter.com",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
-    instagram: "https://instagram.com",
+    instagram: process.env.INSTAGRAM_URL || "https://instagram.com",
   },
   contact: {
-    email: "hello@floattech.com",
-    phone: "+1 (555) 123-4567",
+    email: process.env.CONTACT_EMAIL || "hello@floattech.com",
+    phone: process.env.CONTACT_PHONE || "+1 (555) 123-4567",
   },
   seo: {
     googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,

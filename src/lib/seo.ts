@@ -1,17 +1,55 @@
 import { Metadata } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://floattech.com';
-const siteName = 'FloatTech - Digital Agency';
-const description =
-  'Building modern digital experiences with innovative solutions. Web design, development, and digital marketing services for businesses worldwide.';
+const env = (key: string) => {
+  const value = process.env[key];
+  return value && value.trim() !== '' ? value : undefined;
+};
+
+const baseUrl = env('NEXT_PUBLIC_BASE_URL');
+const siteName = env('SITE_NAME');
+const description = env('SITE_DESCRIPTION');
+const twitterHandle = env('SITE_TWITTER_HANDLE');
+const social = {
+  twitter: env('SOCIAL_TWITTER'),
+  linkedin: env('SOCIAL_LINKEDIN'),
+  github: env('SOCIAL_GITHUB'),
+  facebook: env('SOCIAL_FACEBOOK'),
+  instagram: env('INSTAGRAM_URL'),
+};
+const socialLinks = Object.values(social).filter(
+  (url): url is string => typeof url === 'string'
+);
+const contactEmail = env('CONTACT_EMAIL');
+const contactPhone = env('CONTACT_PHONE');
+const address = {
+  streetAddress: env('ADDRESS_STREET'),
+  addressLocality: env('ADDRESS_CITY'),
+  addressRegion: env('ADDRESS_REGION'),
+  postalCode: env('ADDRESS_POSTAL_CODE'),
+  addressCountry: env('ADDRESS_COUNTRY'),
+};
+const addressFields = Object.entries(address).filter(
+  (entry): entry is [string, string] => entry[1] !== undefined
+);
+const addressObject = Object.fromEntries(addressFields);
+const hasAddress = addressFields.length > 0;
+const foundingDate = env('SITE_FOUNDING_YEAR');
+const geo = {
+  latitude: env('GEO_LATITUDE'),
+  longitude: env('GEO_LONGITUDE'),
+};
+const hasGeo = geo.latitude !== undefined && geo.longitude !== undefined;
+const contactWays = [
+  contactEmail ? `email us at ${contactEmail}` : null,
+  contactPhone ? `call ${contactPhone}` : null,
+].filter(Boolean).join(' or ');
 
 export function generateMetadata(overrides?: Partial<Metadata>): Metadata {
-  return {
-    title: {
-      default: siteName,
-      template: `%s | ${siteName}`,
-    },
-    description,
+  const metadata: Metadata = {
+    ...(siteName
+      ? { title: { default: siteName, template: `%s | ${siteName}` } }
+      : {}),
+    ...(description ? { description } : {}),
     keywords: [
       'digital agency',
       'web design',
@@ -29,37 +67,45 @@ export function generateMetadata(overrides?: Partial<Metadata>): Metadata {
       'web redesign',
       'business websites',
     ],
-    authors: [{ name: 'FloatTech', url: baseUrl }],
-    creator: 'FloatTech',
-    publisher: 'FloatTech',
-    metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: baseUrl,
-    },
+    ...(siteName
+      ? {
+          authors: siteName && baseUrl ? [{ name: siteName, url: baseUrl }] : [{ name: siteName }],
+          creator: siteName,
+          publisher: siteName,
+        }
+      : {}),
+    ...(baseUrl
+      ? {
+          metadataBase: new URL(baseUrl),
+          alternates: { canonical: baseUrl },
+        }
+      : {}),
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: baseUrl,
-      siteName,
-      title: siteName,
-      description,
-      images: [
-        {
-          url: `${baseUrl}/og-image.png`,
-          width: 1200,
-          height: 630,
-          alt: 'FloatTech - Digital Agency',
-          type: 'image/png',
-        },
-      ],
+      ...(baseUrl ? { url: baseUrl } : {}),
+      ...(siteName ? { siteName, title: siteName } : {}),
+      ...(description ? { description } : {}),
+      ...(baseUrl && siteName
+        ? {
+            images: [
+              {
+                url: `${baseUrl}/og-image.png`,
+                width: 1200,
+                height: 630,
+                alt: siteName,
+                type: 'image/png',
+              },
+            ],
+          }
+        : {}),
     },
     twitter: {
+      ...(siteName ? { title: siteName } : {}),
+      ...(description ? { description } : {}),
+      ...(baseUrl ? { images: [`${baseUrl}/og-image.png`] } : {}),
+      ...(twitterHandle ? { creator: twitterHandle, site: twitterHandle } : {}),
       card: 'summary_large_image',
-      title: siteName,
-      description,
-      images: [`${baseUrl}/og-image.png`],
-      creator: '@floattech',
-      site: '@floattech',
     },
     robots: {
       index: true,
@@ -72,71 +118,79 @@ export function generateMetadata(overrides?: Partial<Metadata>): Metadata {
         'max-snippet': -1,
       },
     },
-    verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
-      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
-      yahoo: process.env.NEXT_PUBLIC_YAHOO_VERIFICATION || '',
-    },
+    ...(() => {
+      const verification: Record<string, string> = {};
+      const google = env('NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION');
+      const yandex = env('NEXT_PUBLIC_YANDEX_VERIFICATION');
+      const yahoo = env('NEXT_PUBLIC_YAHOO_VERIFICATION');
+      if (google) verification.google = google;
+      if (yandex) verification.yandex = yandex;
+      if (yahoo) verification.yahoo = yahoo;
+      return Object.keys(verification).length ? { verification } : {};
+    })(),
     ...overrides,
   };
+  return metadata;
 }
 
 // WebSite schema with SearchAction for Google Sitelinks Searchbox
 export const webSiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: siteName,
-  url: baseUrl,
-  description,
-  publisher: {
-    '@type': 'Organization',
-    name: 'FloatTech',
-    logo: {
-      '@type': 'ImageObject',
-      url: `${baseUrl}/logo.png`,
-    },
-  },
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: `${baseUrl}/search?q={search_term_string}`,
-    },
-    'query-input': 'required name=search_term_string',
-  },
+  ...(siteName ? { name: siteName } : {}),
+  ...(baseUrl ? { url: baseUrl } : {}),
+  ...(description ? { description } : {}),
+  ...(siteName || baseUrl
+    ? {
+        publisher: {
+          '@type': 'Organization',
+          ...(siteName ? { name: siteName } : {}),
+          ...(baseUrl
+            ? { logo: { '@type': 'ImageObject', url: `${baseUrl}/logo.png` } }
+            : {}),
+        },
+      }
+    : {}),
+  ...(baseUrl
+    ? {
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${baseUrl}/search?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      }
+    : {}),
 };
 
 // Organization schema with detailed business info
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'FloatTech',
-  description,
-  url: baseUrl,
-  logo: `${baseUrl}/logo.png`,
-  image: `${baseUrl}/og-image.png`,
-  sameAs: [
-    'https://twitter.com/floattech',
-    'https://linkedin.com/company/floattech',
-    'https://github.com/floattech',
-    'https://facebook.com/floattech',
-    'https://instagram.com/floattech',
-  ],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: '+1-555-123-4567',
-    contactType: 'customer service',
-    availableLanguage: ['English'],
-  },
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '123 Digital Ave',
-    addressLocality: 'Tech City',
-    addressRegion: 'TC',
-    postalCode: '12345',
-    addressCountry: 'US',
-  },
-  foundingDate: '2016',
+  ...(siteName ? { name: siteName } : {}),
+  ...(description ? { description } : {}),
+  ...(baseUrl
+    ? {
+        url: baseUrl,
+        logo: `${baseUrl}/logo.png`,
+        image: `${baseUrl}/og-image.png`,
+      }
+    : {}),
+  ...(socialLinks.length ? { sameAs: socialLinks } : {}),
+  ...(contactPhone
+    ? {
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: contactPhone,
+          contactType: 'customer service',
+          availableLanguage: ['English'],
+        },
+      }
+    : {}),
+  ...(hasAddress ? { address: { '@type': 'PostalAddress', ...addressObject } } : {}),
+  ...(foundingDate ? { foundingDate } : {}),
   dateModified: new Date().toISOString(),
   numberOfEmployees: {
     '@type': 'QuantitativeValue',
@@ -155,24 +209,13 @@ export const organizationSchema = {
 export const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'FloatTech',
-  description,
-  url: baseUrl,
-  telephone: '+1-555-123-4567',
-  email: 'hello@floattech.com',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '123 Digital Ave',
-    addressLocality: 'Tech City',
-    addressRegion: 'TC',
-    postalCode: '12345',
-    addressCountry: 'US',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: '37.7749',
-    longitude: '-122.4194',
-  },
+  ...(siteName ? { name: siteName } : {}),
+  ...(description ? { description } : {}),
+  ...(baseUrl ? { url: baseUrl } : {}),
+  ...(contactPhone ? { telephone: contactPhone } : {}),
+  ...(contactEmail ? { email: contactEmail } : {}),
+  ...(hasAddress ? { address: { '@type': 'PostalAddress', ...addressObject } } : {}),
+  ...(hasGeo ? { geo: { '@type': 'GeoCoordinates', ...geo } } : {}),
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -188,8 +231,9 @@ export const localBusinessSchema = {
     },
   ],
   priceRange: '$$$',
-  image: `${baseUrl}/og-image.png`,
-  logo: `${baseUrl}/logo.png`,
+  ...(baseUrl
+    ? { image: `${baseUrl}/og-image.png`, logo: `${baseUrl}/logo.png` }
+    : {}),
 };
 
 // Service schemas for each service offered
@@ -200,7 +244,7 @@ export const serviceSchemas = [
     serviceType: 'UI/UX Design',
     provider: {
       '@type': 'Organization',
-      name: 'FloatTech',
+      ...(siteName ? { name: siteName } : {}),
     },
     description: 'Immersive digital journeys crafted with attention to every micro-interaction and pixel.',
     areaServed: 'US',
@@ -224,7 +268,7 @@ export const serviceSchemas = [
     serviceType: 'Web Development',
     provider: {
       '@type': 'Organization',
-      name: 'FloatTech',
+      ...(siteName ? { name: siteName } : {}),
     },
     description: 'React, Next.js, and Tailwind based architectures for lightning-fast performance.',
     areaServed: 'US',
@@ -235,7 +279,7 @@ export const serviceSchemas = [
     serviceType: 'Digital Marketing',
     provider: {
       '@type': 'Organization',
-      name: 'FloatTech',
+      ...(siteName ? { name: siteName } : {}),
     },
     description: 'We implement proven growth tactics including SEO, analytics, and conversion optimization.',
     areaServed: 'US',
@@ -249,10 +293,10 @@ export const faqSchema = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'What services does FloatTech offer?',
+      name: `What services does ${siteName ?? 'this agency'} offer?`,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'FloatTech offers UI/UX design, website design, frontend development, landing pages, business websites, and website redesign services.',
+        text: 'UI/UX design, website design, frontend development, landing pages, business websites, and website redesign services.',
       },
     },
     {
@@ -265,20 +309,24 @@ export const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'What technologies does FloatTech use?',
+      name: 'What technologies are used?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We use React, Next.js, Tailwind CSS, and modern web technologies to build fast, scalable applications.',
+        text: 'React, Next.js, Tailwind CSS, and modern web technologies to build fast, scalable applications.',
       },
     },
-    {
-      '@type': 'Question',
-      name: 'How can I contact FloatTech?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'You can reach us at hello@floattech.com or call +1 (555) 123-4567. You can also fill out the contact form on our website.',
-      },
-    },
+    ...(contactWays
+      ? [
+          {
+            '@type': 'Question',
+            name: 'How can I contact you?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `You can ${contactWays}. You can also fill out the contact form on our website.`,
+            },
+          },
+        ]
+      : []),
   ],
 };
 
@@ -291,7 +339,7 @@ export const breadcrumbSchema = {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: baseUrl,
+      ...(baseUrl ? { item: baseUrl } : {}),
     },
   ],
 };
