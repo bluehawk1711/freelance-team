@@ -10,8 +10,10 @@ A modern, high-performance digital agency website built with Next.js 16, Redux, 
 - **Services Showcase** - Detailed service offerings with icons
 - **Portfolio Gallery** - Display of completed projects with filtering
 - **Testimonials Carousel** - Client testimonials with ratings
-- **Contact Form** - Fully validated contact form with API integration
-- **Newsletter Signup** - Email subscription system
+- **Contact Form** - Fully validated contact form with email notifications via Gmail SMTP
+- **Active Section Navigation** - Navbar underline follows the section in view while scrolling or clicking
+- **Smooth Scrolling** - Anchor navigation with smooth scroll and clean URLs
+- **Legal Pages** - Privacy Policy and Terms of Service pages (no data collection)
 - **Smooth Animations** - Framer Motion animations throughout
 
 ### Technical Features
@@ -54,6 +56,8 @@ cp .env.example .env.local
 
 # Set up environment variables
 # NEXT_PUBLIC_BASE_URL=http://localhost:3000
+# GMAIL_EMAIL and GMAIL_APP_PASSWORD for contact form emails
+# See .env.example for the full list of variables
 ```
 
 ### Development
@@ -83,13 +87,15 @@ pnpm dev
 
 ```
 floattech/
-├── app/                        # Next.js App Router
-│   ├── api/                   # API routes (contact, theme, newsletter)
-│   ├── layout.tsx             # Root layout with metadata
-│   ├── page.tsx               # Home page
-│   ├── sitemap.ts             # SEO sitemap
-│   └── globals.css            # Global styles with Tailwind
 ├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API routes (contact, theme, newsletter)
+│   │   ├── privacy/           # Privacy Policy page
+│   │   ├── terms/             # Terms of Service page
+│   │   ├── layout.tsx         # Root layout with metadata & JSON-LD
+│   │   ├── page.tsx           # Home page
+│   │   ├── sitemap.ts         # SEO sitemap
+│   │   └── globals.css        # Global styles with Tailwind
 │   ├── components/
 │   │   ├── ui/                # Reusable UI components
 │   │   ├── sections/          # Page sections (Hero, Services, etc)
@@ -99,11 +105,13 @@ floattech/
 │   │   ├── slices/            # Redux state slices
 │   │   ├── store.ts           # Redux store configuration
 │   │   └── hooks.ts           # Redux hooks
+│   ├── hooks/                 # Custom hooks (useActiveSection)
 │   ├── lib/
 │   │   ├── animations.ts      # Framer Motion animation presets
 │   │   ├── api.ts             # API utilities
-│   │   ├── seo.ts             # SEO utilities
+│   │   ├── seo.ts             # SEO utilities (env-driven schemas)
 │   │   └── utils.ts           # General utilities
+│   ├── config/                # Config (site config from env vars)
 │   ├── constants/             # Application constants
 │   ├── data/                  # Static data (services, portfolio, etc)
 │   ├── providers/             # Context/Redux providers
@@ -143,16 +151,12 @@ floattech/
 - **POST** `/api/contact` - Submit contact form
 - Request: `{ name, email, phone?, subject, message }`
 - Response: `{ success: boolean, message: string }`
+- Sends the submission as an email notification via Gmail SMTP (`GMAIL_EMAIL` / `GMAIL_APP_PASSWORD`)
 
 ### Theme
 - **GET** `/api/theme` - Get current theme preference
 - **POST** `/api/theme` - Set theme preference
 - Request: `{ theme: "light" | "dark" | "system" }`
-
-### Newsletter
-- **POST** `/api/newsletter` - Subscribe to newsletter
-- Request: `{ email: string }`
-- Response: `{ success: boolean, message: string }`
 
 ## Redux State Structure
 
@@ -193,22 +197,47 @@ floattech/
 
 ## Environment Variables
 
+All configuration is done via environment variables. Copy `.env.example` to `.env.local` and fill in your values. Empty variables are safely ignored (SEO fields are omitted rather than using fallback values).
+
 ```bash
-# Required
+# Site
 NEXT_PUBLIC_BASE_URL=https://floattech.com
+SITE_NAME=FloatTech - Digital Agency
+SITE_DESCRIPTION=Building modern digital experiences with innovative solutions.
+SITE_TWITTER_HANDLE=@floattech
+SITE_FOUNDING_YEAR=2016
 
-# Optional - Email configuration
-SMTP_FROM=noreply@floattech.com
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password
+# Email sending (Gmail + App Password)
+# Create an app password: https://myaccount.google.com/apppasswords
+GMAIL_EMAIL=your-email@gmail.com
+GMAIL_APP_PASSWORD=your-16-digit-app-password
+SMTP_FROM=your-email@gmail.com
 
-# Optional - Analytics
-NEXT_PUBLIC_GTAG_ID=
+# Contact details (shown on the site / used for SEO)
+NEXT_PUBLIC_CONTACT_EMAIL=your-email@gmail.com
+NEXT_PUBLIC_CONTACT_PHONE=+1-555-123-4567
 
-# Optional - API
-API_SECRET_KEY=your-secret-key-here
+# Social links (used for SEO schema, footer & contact section)
+NEXT_PUBLIC_SOCIAL_TWITTER=https://twitter.com/your-handle
+NEXT_PUBLIC_SOCIAL_LINKEDIN=https://linkedin.com/in/your-handle
+NEXT_PUBLIC_SOCIAL_GITHUB=https://github.com/your-handle
+NEXT_PUBLIC_SOCIAL_FACEBOOK=https://facebook.com/your-handle
+NEXT_PUBLIC_INSTAGRAM_URL=https://instagram.com/your-handle
+
+# Business address / geo (used for LocalBusiness schema)
+ADDRESS_STREET=123 Digital Ave
+ADDRESS_CITY=Tech City
+ADDRESS_REGION=TC
+ADDRESS_POSTAL_CODE=12345
+ADDRESS_COUNTRY=US
+GEO_LATITUDE=37.7749
+GEO_LONGITUDE=-122.4194
+
+# Analytics / SEO (optional)
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=
+NEXT_PUBLIC_YANDEX_VERIFICATION=
+NEXT_PUBLIC_YAHOO_VERIFICATION=
+NEXT_PUBLIC_GOOGLE_ANALYTICS=
 ```
 
 ## Performance Optimization
@@ -230,6 +259,11 @@ API_SECRET_KEY=your-secret-key-here
 - Twitter Card support
 - Sitemap generation
 - Robots.txt configuration
+
+## Legal Pages
+
+- **Privacy Policy** (`/privacy`) - States that no personal data is collected, stored, or shared. Contact form submissions are sent via email only and never persisted.
+- **Terms of Service** (`/terms`) - Standard terms covering site usage, intellectual property, disclaimers, and liability.
 
 ## Deployment
 
@@ -307,9 +341,9 @@ Current performance targets:
 - Check browser dev console for errors
 
 ### Form Not Submitting
-- Verify API route exists: `app/api/contact/route.ts`
+- Verify API route exists: `src/app/api/contact/route.ts`
+- Check `GMAIL_EMAIL` and `GMAIL_APP_PASSWORD` are set (contact notifications are sent via Gmail SMTP)
 - Check browser network tab
-- Verify CORS configuration
 - Check server logs
 
 ### Styling Issues
@@ -338,5 +372,5 @@ For issues and questions:
 ---
 
 **Version**: 1.0.0  
-**Last Updated**: 2024  
+**Last Updated**: 2026  
 **Maintained by**: FloatTech Team

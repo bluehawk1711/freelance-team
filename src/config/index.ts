@@ -13,11 +13,11 @@ export const config = {
     twitter: "https://twitter.com",
     linkedin: "https://linkedin.com",
     github: "https://github.com",
-    instagram: process.env.INSTAGRAM_URL || "https://instagram.com",
+    instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com",
   },
   contact: {
-    email: process.env.CONTACT_EMAIL || "hello@floattech.com",
-    phone: process.env.CONTACT_PHONE || "+1 (555) 123-4567",
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@floattech.com",
+    phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+1 (555) 123-4567",
   },
   seo: {
     googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,

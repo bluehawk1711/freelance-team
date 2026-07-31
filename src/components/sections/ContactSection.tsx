@@ -19,15 +19,32 @@ import {
   setError,
 } from "@/redux/slices/contactSlice";
 import { contactFormSchema, type ContactFormData } from "@/schemas/contact.schema";
-import { Mail, MapPin, Share2, Camera, MessageSquare } from "lucide-react";
+import { siteConfig } from "@/config/site";
+import { Mail, MapPin, Phone } from "lucide-react";
+import {
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  GithubIcon,
+  FacebookIcon,
+} from "@/components/ui/brand-icons";
 import { Toaster, toast } from "sonner";
+
+const socialLinks = [
+  { name: "Instagram", url: siteConfig.social.instagram, Icon: InstagramIcon },
+  { name: "LinkedIn", url: siteConfig.social.linkedin, Icon: LinkedinIcon },
+  { name: "Twitter", url: siteConfig.social.twitter, Icon: TwitterIcon },
+  { name: "GitHub", url: siteConfig.social.github, Icon: GithubIcon },
+  { name: "Facebook", url: siteConfig.social.facebook, Icon: FacebookIcon },
+].filter((link): link is typeof link & { url: string } => Boolean(link.url));
 
 export function ContactSection() {
   const dispatch = useAppDispatch();
   const { formData, isSubmitting, isSuccess } = useAppSelector(
     (state) => state.contact
   );
-  const { email, address } = useAppSelector((state) => state.site);
+  const { address } = useAppSelector((state) => state.site);
+  const { email: contactEmail, phone: contactPhone } = siteConfig.contact;
 
   const {
     register,
@@ -89,17 +106,43 @@ export function ContactSection() {
               </Heading>
 
               <div className="space-y-6 pt-4">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-primary/10">
-                      <Mail className="w-5 h-5 text-primary" />
+                {contactEmail && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-primary/10">
+                        <Mail className="w-5 h-5 text-primary" />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Email Us</p>
+                      <a
+                        href={`mailto:${contactEmail}`}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        {contactEmail}
+                      </a>
                     </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Email Us</p>
-                    <p className="text-muted-foreground">{email}</p>
+                )}
+
+                {contactPhone && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-primary/10">
+                        <Phone className="w-5 h-5 text-primary" />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Call Us</p>
+                      <a
+                        href={`tel:${contactPhone.replace(/[^+\d]/g, "")}`}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        {contactPhone}
+                      </a>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
@@ -114,17 +157,22 @@ export function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-2">
-                {[Share2, Camera, MessageSquare].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="flex items-center justify-center w-10 h-10 rounded-xl border border-border hover:bg-muted transition-colors"
-                  >
-                    <Icon className="w-4 h-4 text-muted-foreground" />
-                  </a>
-                ))}
-              </div>
+              {socialLinks.length > 0 && (
+                <div className="flex gap-3 pt-2">
+                  {socialLinks.map(({ name, url, Icon }) => (
+                    <a
+                      key={name}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={name}
+                      className="flex items-center justify-center w-10 h-10 rounded-xl border border-border hover:bg-muted transition-colors"
+                    >
+                      <Icon className="w-4 h-4 text-muted-foreground" />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Right - Contact Form */}

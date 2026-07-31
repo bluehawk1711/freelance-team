@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container, Button } from "@/components/ui";
@@ -11,6 +11,9 @@ import {
   toggleMobileMenu,
   closeMobileMenu,
 } from "@/redux/slices/navigationSlice";
+import { useActiveSection } from "@/hooks/useActiveSection";
+
+const SECTION_IDS = ["services", "portfolio", "about", "process", "contact"];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,11 +27,46 @@ export function Navbar() {
   );
   const { companyName } = useAppSelector((state) => state.site);
   const pathname = usePathname();
+  const activeSection = useActiveSection(SECTION_IDS);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleHashClick = (event: MouseEvent) => {
+      const anchor = (event.target as HTMLElement).closest<HTMLAnchorElement>(
+        "a[href*='#']",
+      );
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      const hashIndex = href.indexOf("#");
+      if (hashIndex === -1) return;
+
+      const path = href.slice(0, hashIndex) || window.location.pathname;
+      const hash = href.slice(hashIndex + 1);
+      if (!hash) return;
+
+      const currentPath = window.location.pathname.replace(/\/$/, "");
+      const linkPath = path.replace(/\/$/, "");
+      if (linkPath !== currentPath) return;
+
+      event.preventDefault();
+
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.replaceState(null, "", `${path}#${hash}`);
+      }
+    };
+
+    document.addEventListener("click", handleHashClick);
+    return () => document.removeEventListener("click", handleHashClick);
   }, []);
 
   useEffect(() => {
@@ -42,7 +80,9 @@ export function Navbar() {
     const activeIndex =
       hoveredIndex !== null
         ? hoveredIndex
-        : navItems.findIndex((item) => item.href === pathname);
+        : activeSection
+          ? navItems.findIndex((item) => item.href === `/#${activeSection}`)
+          : navItems.findIndex((item) => item.href === "/");
 
     if (activeIndex !== -1 && itemRefs.current[activeIndex] && navRef.current) {
       const item = itemRefs.current[activeIndex];
@@ -57,7 +97,7 @@ export function Navbar() {
     } else {
       setLineStyle((prev) => ({ ...prev, opacity: 0 }));
     }
-  }, [hoveredIndex, pathname, navItems]);
+  }, [hoveredIndex, pathname, navItems, activeSection]);
 
   return (
     <>
@@ -100,7 +140,9 @@ export function Navbar() {
                 />
 
                 {navItems.map((item, index) => {
-                  const isActive = item.href === pathname;
+                  const isActive = activeSection
+                    ? item.href === `/#${activeSection}`
+                    : item.href === "/";
                   return (
                     <Link
                       key={item.id}
@@ -109,7 +151,7 @@ export function Navbar() {
                         itemRefs.current[index] = el;
                       }}
                       onMouseEnter={() => setHoveredIndex(index)}
-                      className={`relative py-1 text-sm font-medium transition-colors duration-200 ${
+                      className={`relative py-[0.5px] text-sm font-medium transition-colors duration-200 ${
                         isActive
                           ? "text-foreground"
                           : "text-muted-foreground hover:text-foreground"
@@ -130,9 +172,10 @@ export function Navbar() {
                 className="size-9 rounded-full transition-colors duration-200 hover:bg-muted"
               />
               <Button
-                size="sm"
+                size="lg"
                 variant="gradient"
                 className="rounded-full px-5 transition-transform duration-200 hover:scale-105 hover:shadow-lg hover:shadow-primary/25 active:scale-100"
+                render={<Link href="/#contact" />}
               >
                 Get Started
               </Button>
@@ -186,7 +229,9 @@ export function Navbar() {
         <Container size="xl" className="py-6">
           <div className="flex flex-col gap-2">
             {navItems.map((item, index) => {
-              const isActive = item.href === pathname;
+              const isActive = activeSection
+                ? item.href === `/#${activeSection}`
+                : item.href === "/";
               return (
                 <Link
                   key={item.id}
@@ -208,6 +253,7 @@ export function Navbar() {
             <Button
               className="w-full mt-4 rounded-full transition-transform duration-200 hover:scale-[1.02] active:scale-100"
               variant="gradient"
+              render={<Link href="/#contact" onClick={() => dispatch(closeMobileMenu())} />}
             >
               Get Started
             </Button>

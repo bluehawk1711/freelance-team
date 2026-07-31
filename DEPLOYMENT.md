@@ -30,7 +30,9 @@ Vercel is the easiest way to deploy Next.js applications:
 3. **Environment Variables**
    - Copy `.env.example` to `.env.local`
    - Set `NEXT_PUBLIC_BASE_URL` to your production domain
-   - Add any additional required variables
+   - Set `GMAIL_EMAIL` and `GMAIL_APP_PASSWORD` so the contact form can send email notifications (create an app password at https://myaccount.google.com/apppasswords)
+   - Set `NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_CONTACT_PHONE`, and the `NEXT_PUBLIC_SOCIAL_*` / `NEXT_PUBLIC_INSTAGRAM_URL` links to your own contact details and social profiles
+   - All variables are optional; any variable left empty is safely omitted (no fallback data is used)
 
 ### Option 2: Self-Hosted (Docker)
 
@@ -51,7 +53,11 @@ CMD ["pnpm", "start"]
 
 # Build and run
 docker build -t floattech .
-docker run -p 3000:3000 -e NEXT_PUBLIC_BASE_URL=https://floattech.com floattech
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_BASE_URL=https://floattech.com \
+  -e GMAIL_EMAIL=your-email@gmail.com \
+  -e GMAIL_APP_PASSWORD=your-16-digit-app-password \
+  floattech
 ```
 
 ### Option 3: Traditional Server (Ubuntu/Debian)
@@ -171,5 +177,5 @@ For deployment issues:
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2026
 **Maintained By**: FloatTech Team

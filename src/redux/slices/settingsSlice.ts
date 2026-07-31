@@ -15,7 +15,7 @@ interface SettingsState {
 
 const initialState: SettingsState = {
   locale: "en",
-  currency: "USD",
+  currency: "INR",
   timezone: "UTC",
   notifications: true,
   newsletter: false,

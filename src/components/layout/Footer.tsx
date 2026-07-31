@@ -1,9 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { Container, Text, Heading, FloatingInput, Button } from "@/components/ui";
+import { Container, Text, Heading } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
-import { Send } from "lucide-react";
+import { siteConfig } from "@/config/site";
+import {
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  GithubIcon,
+  FacebookIcon,
+} from "@/components/ui/brand-icons";
+
+const socialLinks = [
+  { name: "Instagram", url: siteConfig.social.instagram, Icon: InstagramIcon },
+  { name: "LinkedIn", url: siteConfig.social.linkedin, Icon: LinkedinIcon },
+  { name: "Twitter", url: siteConfig.social.twitter, Icon: TwitterIcon },
+  { name: "GitHub", url: siteConfig.social.github, Icon: GithubIcon },
+  { name: "Facebook", url: siteConfig.social.facebook, Icon: FacebookIcon },
+].filter((link): link is typeof link & { url: string } => Boolean(link.url));
+
+const platformLinks = [
+  { label: "Work", href: "/#portfolio" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#about" },
+];
+
+const resourceLinks = [
+  { label: "Process", href: "/#process" },
+  { label: "Contact", href: "/#contact" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
+];
 
 export function Footer() {
   const { companyName } = useAppSelector((state) => state.site);
@@ -27,13 +55,13 @@ export function Footer() {
               Platform
             </Heading>
             <ul className="space-y-3">
-              {["Work", "Services", "About"].map((item) => (
-                <li key={item}>
+              {platformLinks.map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -45,13 +73,13 @@ export function Footer() {
               Resources
             </Heading>
             <ul className="space-y-3">
-              {["Process", "Contact", "Privacy Policy"].map((item) => (
-                <li key={item}>
+              {resourceLinks.map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -63,14 +91,34 @@ export function Footer() {
               Stay Connected
             </Heading>
             <Text size="sm" color="muted">
-              Subscribe to our newsletter for insights.
+              Follow us on social media for updates.
             </Text>
-            <div className="flex gap-2">
-              <FloatingInput label="Email" type="email" className="flex-1" />
-              <Button size="icon" variant="default" className="flex-shrink-0" aria-label="Subscribe to newsletter">
-                <Send className="w-4 h-4" aria-hidden="true" />
-              </Button>
-            </div>
+            {socialLinks.length > 0 ? (
+              <div className="flex gap-3">
+                {socialLinks.map(({ name, url, Icon }) => (
+                  <a
+                    key={name}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={name}
+                    className="flex items-center justify-center w-10 h-10 rounded-xl border border-border hover:bg-muted transition-colors"
+                  >
+                    <Icon className="w-4 h-4 text-muted-foreground" />
+                  </a>
+                ))}
+              </div>
+            ) : null}
+            {siteConfig.contact.email ? (
+              <Text size="sm" color="muted">
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="hover:text-foreground transition-colors"
+                >
+                  {siteConfig.contact.email}
+                </a>
+              </Text>
+            ) : null}
           </div>
         </div>
 
@@ -81,13 +129,16 @@ export function Footer() {
             &copy; 2026 {companyName}. All rights reserved.
           </Text>
           <div className="flex gap-6">
-            {["Privacy Policy", "Terms of Service"].map((item) => (
+            {[
+              { label: "Privacy Policy", href: "/privacy" },
+              { label: "Terms of Service", href: "/terms" },
+            ].map((item) => (
               <Link
-                key={item}
-                href="#"
+                key={item.label}
+                href={item.href}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {item}
+                {item.label}
               </Link>
             ))}
           </div>

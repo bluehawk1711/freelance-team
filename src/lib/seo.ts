@@ -10,17 +10,17 @@ const siteName = env('SITE_NAME');
 const description = env('SITE_DESCRIPTION');
 const twitterHandle = env('SITE_TWITTER_HANDLE');
 const social = {
-  twitter: env('SOCIAL_TWITTER'),
-  linkedin: env('SOCIAL_LINKEDIN'),
-  github: env('SOCIAL_GITHUB'),
-  facebook: env('SOCIAL_FACEBOOK'),
-  instagram: env('INSTAGRAM_URL'),
+  twitter: env('NEXT_PUBLIC_SOCIAL_TWITTER'),
+  linkedin: env('NEXT_PUBLIC_SOCIAL_LINKEDIN'),
+  github: env('NEXT_PUBLIC_SOCIAL_GITHUB'),
+  facebook: env('NEXT_PUBLIC_SOCIAL_FACEBOOK'),
+  instagram: env('NEXT_PUBLIC_INSTAGRAM_URL'),
 };
 const socialLinks = Object.values(social).filter(
   (url): url is string => typeof url === 'string'
 );
-const contactEmail = env('CONTACT_EMAIL');
-const contactPhone = env('CONTACT_PHONE');
+const contactEmail = env('NEXT_PUBLIC_CONTACT_EMAIL');
+const contactPhone = env('NEXT_PUBLIC_CONTACT_PHONE');
 const address = {
   streetAddress: env('ADDRESS_STREET'),
   addressLocality: env('ADDRESS_CITY'),

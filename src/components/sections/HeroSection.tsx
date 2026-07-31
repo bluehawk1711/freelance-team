@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { Container, Section, Heading, Text, Button } from "@/components/ui";
 import { ArrowRight } from "lucide-react";
 
@@ -39,11 +41,20 @@ export function HeroSection() {
             </Text>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" variant="gradient" className="group">
+              <Button
+                size="lg"
+                variant="gradient"
+                className="group"
+                render={<Link href="/#portfolio" />}
+              >
                 View Our Work
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline">
+              <Button
+                size="lg"
+                variant="outline"
+                render={<Link href="/#contact" />}
+              >
                 Contact Us
               </Button>
             </div>
@@ -53,13 +64,14 @@ export function HeroSection() {
           <div className="relative hidden lg:block">
             <div className="relative">
               <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-br from-muted/50 to-card border border-border shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-48 h-48">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl animate-pulse" />
-                    <div className="absolute inset-4 bg-gradient-to-br from-primary/20 to-transparent rounded-full backdrop-blur-sm border border-primary/20" />
-                  </div>
-                </div>
+                <Image
+                  src="/hero.webp"
+                  alt="FloatTech digital agency hero"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
                 {/* Grain texture on right side */}
                 <div
                   className="absolute inset-0 opacity-[0.06] pointer-events-none"

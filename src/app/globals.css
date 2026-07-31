@@ -172,9 +172,20 @@
 
 html {
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 html::-webkit-scrollbar {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+section[id] {
+  scroll-margin-top: 5rem;
 }
 
 .theme-transition-overlay {
