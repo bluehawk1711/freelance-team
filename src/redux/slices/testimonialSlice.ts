@@ -22,33 +22,21 @@ const initialState: TestimonialState = {
   testimonials: [
     {
       id: "1",
-      name: "Sarah Johnson",
-      role: "CEO",
-      company: "TechVision",
+      name: "Himanshu Prajapat",
+      role: "Owner",
+      company: "Jewellery Walla",
       content:
-        "FloatTech transformed our digital presence. Their strategic approach and execution were flawless.",
+        "FloatTech built our complete e-commerce store for Jewellery Walla. The website looks stunning, loads fast, and our customers can easily browse and order online. Truly professional work!",
       rating: 5,
-      avatar: "/testimonials/sarah.jpg",
     },
     {
       id: "2",
-      name: "Michael Chen",
-      role: "Product Manager",
-      company: "InnovateLabs",
+      name: "Mayank Dadhich",
+      role: "Owner",
+      company: "Gurukripa Tours and Travels",
       content:
-        "The quality of their work and performance of our new platform exceeded all expectations.",
+        "The website for Gurukripa Tours and Travels is exactly what we needed. It beautifully presents our tour packages and makes it easy for customers to reach us. We have received many more inquiries since launching. Highly recommended!",
       rating: 5,
-      avatar: "/testimonials/michael.jpg",
-    },
-    {
-      id: "3",
-      name: "Emma Davis",
-      role: "Marketing Director",
-      company: "GrowthCo",
-      content:
-        "Working with FloatTech was a game-changer for our business. Highly recommended!",
-      rating: 5,
-      avatar: "/testimonials/emma.jpg",
     },
   ],
   currentIndex: 0,
