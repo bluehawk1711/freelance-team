@@ -11,6 +11,7 @@ import {
   FloatingInput,
   Textarea,
 } from "@/components/ui";
+import { contactFormSchema, type ContactFormData } from "@/schemas/contact.schema";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   updateFormData,
@@ -18,7 +19,6 @@ import {
   setSuccess,
   setError,
 } from "@/redux/slices/contactSlice";
-import { contactFormSchema, type ContactFormData } from "@/schemas/contact.schema";
 import { siteConfig } from "@/config/site";
 import { Mail, MapPin, Phone } from "lucide-react";
 import {

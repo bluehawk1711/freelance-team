@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { env } from "@/config/site";
 
 interface SiteState {
   companyName: string;
@@ -25,20 +26,31 @@ interface SiteState {
   };
 }
 
+const stringOr = (key: string) => env(key) ?? "";
+
+const address = [
+  env("NEXT_PUBLIC_ADDRESS_STREET"),
+  env("NEXT_PUBLIC_ADDRESS_CITY"),
+  env("NEXT_PUBLIC_ADDRESS_REGION"),
+  env("NEXT_PUBLIC_ADDRESS_POSTAL_CODE"),
+  env("NEXT_PUBLIC_ADDRESS_COUNTRY"),
+]
+  .filter(Boolean)
+  .join(", ");
+
 const initialState: SiteState = {
-  companyName: "FloatTech",
-  companyDescription:
-    "We are a business digital agency dedicated to transforming businesses through innovative digital experiences and cutting-edge technology.",
-  tagline: "Building Modern Digital Experiences",
-  email: "hello@floattech.com",
-  phone: "+1 (555) 123-4567",
-  address: "123 Digital Ave, Tech City, TC 12345",
+  companyName: stringOr("NEXT_PUBLIC_COMPANY_NAME"),
+  companyDescription: stringOr("NEXT_PUBLIC_SITE_DESCRIPTION"),
+  tagline: stringOr("NEXT_PUBLIC_SITE_TAGLINE"),
+  email: stringOr("NEXT_PUBLIC_CONTACT_EMAIL"),
+  phone: stringOr("NEXT_PUBLIC_CONTACT_PHONE"),
+  address,
   socialLinks: {
-    twitter: "https://twitter.com",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
-    instagram: "https://instagram.com",
-    facebook: "https://facebook.com",
+    twitter: env("NEXT_PUBLIC_SOCIAL_TWITTER"),
+    linkedin: env("NEXT_PUBLIC_SOCIAL_LINKEDIN"),
+    github: env("NEXT_PUBLIC_SOCIAL_GITHUB"),
+    instagram: env("NEXT_PUBLIC_INSTAGRAM_URL"),
+    facebook: env("NEXT_PUBLIC_SOCIAL_FACEBOOK"),
   },
   businessHours: {
     monday: "9:00 AM - 6:00 PM",

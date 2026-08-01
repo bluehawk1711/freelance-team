@@ -7,7 +7,7 @@ const env = (key: string) => {
 
 const baseUrl = env('NEXT_PUBLIC_BASE_URL');
 const siteName = env('SITE_NAME');
-const description = env('SITE_DESCRIPTION');
+const description = env('NEXT_PUBLIC_SITE_DESCRIPTION');
 const twitterHandle = env('SITE_TWITTER_HANDLE');
 const social = {
   twitter: env('NEXT_PUBLIC_SOCIAL_TWITTER'),
@@ -22,11 +22,11 @@ const socialLinks = Object.values(social).filter(
 const contactEmail = env('NEXT_PUBLIC_CONTACT_EMAIL');
 const contactPhone = env('NEXT_PUBLIC_CONTACT_PHONE');
 const address = {
-  streetAddress: env('ADDRESS_STREET'),
-  addressLocality: env('ADDRESS_CITY'),
-  addressRegion: env('ADDRESS_REGION'),
-  postalCode: env('ADDRESS_POSTAL_CODE'),
-  addressCountry: env('ADDRESS_COUNTRY'),
+  streetAddress: env('NEXT_PUBLIC_ADDRESS_STREET'),
+  addressLocality: env('NEXT_PUBLIC_ADDRESS_CITY'),
+  addressRegion: env('NEXT_PUBLIC_ADDRESS_REGION'),
+  postalCode: env('NEXT_PUBLIC_ADDRESS_POSTAL_CODE'),
+  addressCountry: env('NEXT_PUBLIC_ADDRESS_COUNTRY'),
 };
 const addressFields = Object.entries(address).filter(
   (entry): entry is [string, string] => entry[1] !== undefined
@@ -146,7 +146,7 @@ export const webSiteSchema = {
           '@type': 'Organization',
           ...(siteName ? { name: siteName } : {}),
           ...(baseUrl
-            ? { logo: { '@type': 'ImageObject', url: `${baseUrl}/logo.png` } }
+            ? { logo: { '@type': 'ImageObject', url: `${baseUrl}/logo.jpeg` } }
             : {}),
         },
       }
@@ -174,7 +174,7 @@ export const organizationSchema = {
   ...(baseUrl
     ? {
         url: baseUrl,
-        logo: `${baseUrl}/logo.png`,
+        logo: `${baseUrl}/logo.jpeg`,
         image: `${baseUrl}/og-image.png`,
       }
     : {}),
@@ -232,7 +232,7 @@ export const localBusinessSchema = {
   ],
   priceRange: '$$$',
   ...(baseUrl
-    ? { image: `${baseUrl}/og-image.png`, logo: `${baseUrl}/logo.png` }
+    ? { image: `${baseUrl}/og-image.png`, logo: `${baseUrl}/logo.jpeg` }
     : {}),
 };
 

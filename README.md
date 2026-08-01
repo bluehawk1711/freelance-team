@@ -203,7 +203,9 @@ All configuration is done via environment variables. Copy `.env.example` to `.en
 # Site
 NEXT_PUBLIC_BASE_URL=https://floattech.com
 SITE_NAME=FloatTech - Digital Agency
-SITE_DESCRIPTION=Building modern digital experiences with innovative solutions.
+NEXT_PUBLIC_COMPANY_NAME=FloatTech
+NEXT_PUBLIC_SITE_TAGLINE=Building Modern Digital Experiences
+NEXT_PUBLIC_SITE_DESCRIPTION=Building modern digital experiences with innovative solutions.
 SITE_TWITTER_HANDLE=@floattech
 SITE_FOUNDING_YEAR=2016
 
@@ -224,12 +226,12 @@ NEXT_PUBLIC_SOCIAL_GITHUB=https://github.com/your-handle
 NEXT_PUBLIC_SOCIAL_FACEBOOK=https://facebook.com/your-handle
 NEXT_PUBLIC_INSTAGRAM_URL=https://instagram.com/your-handle
 
-# Business address / geo (used for LocalBusiness schema)
-ADDRESS_STREET=123 Digital Ave
-ADDRESS_CITY=Tech City
-ADDRESS_REGION=TC
-ADDRESS_POSTAL_CODE=12345
-ADDRESS_COUNTRY=US
+# Business address / geo (used for LocalBusiness schema & contact section)
+NEXT_PUBLIC_ADDRESS_STREET=123 Digital Ave
+NEXT_PUBLIC_ADDRESS_CITY=Tech City
+NEXT_PUBLIC_ADDRESS_REGION=TC
+NEXT_PUBLIC_ADDRESS_POSTAL_CODE=12345
+NEXT_PUBLIC_ADDRESS_COUNTRY=US
 GEO_LATITUDE=37.7749
 GEO_LONGITUDE=-122.4194
 

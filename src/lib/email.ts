@@ -17,7 +17,7 @@ function getTransport() {
 }
 
 function getFromAddress() {
-  return process.env.GMAIL_EMAIL || "noreply@floattech.com";
+  return process.env.GMAIL_EMAIL || "floattech39@gmail.com";
 }
 
 export async function sendContactNotification(data: {
@@ -31,7 +31,9 @@ export async function sendContactNotification(data: {
 
   await transport.sendMail({
     from: getFromAddress(),
-    to: getFromAddress(),
+    // FOR TESTING ONLY REMOVED IN PRODUCTION
+    to: "bluehawk1711@gmail.com",
+    // to: getFromAddress(),
     replyTo: data.email,
     subject: `[Contact] ${data.subject}`,
     html: `

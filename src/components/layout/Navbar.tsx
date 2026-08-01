@@ -117,8 +117,13 @@ export function Navbar() {
             {/* Logo */}
             <Link
               href="/"
-              className="font-bold text-xl sm:text-2xl text-foreground transition-opacity duration-200 hover:opacity-70"
+              className="flex items-center gap-2.5 font-bold text-xl sm:text-2xl text-foreground transition-opacity duration-200 hover:opacity-70"
             >
+              <img
+                src="/logo.jpeg"
+                alt={`${companyName} logo`}
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover"
+              />
               {companyName}
             </Link>
 

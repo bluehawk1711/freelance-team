@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Container, Text, Heading } from "@/components/ui";
+import { Container, Text, Heading, FloatingInput, Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { siteConfig } from "@/config/site";
+import { Send } from "lucide-react";
+import { Toaster, toast } from "sonner";
 import {
   InstagramIcon,
   LinkedinIcon,
@@ -35,9 +38,43 @@ const resourceLinks = [
 
 export function Footer() {
   const { companyName } = useAppSelector((state) => state.site);
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!email || !email.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubscribing(true);
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to subscribe");
+      }
+
+      toast.success("Thank you for subscribing to our newsletter!");
+      setEmail("");
+    } catch {
+      toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
 
   return (
-    <footer className="border-t border-border bg-background">
+    <>
+      <Toaster />
+      <footer className="border-t border-border bg-background">
       <Container size="xl" className="py-12 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div className="space-y-4">
@@ -91,8 +128,28 @@ export function Footer() {
               Stay Connected
             </Heading>
             <Text size="sm" color="muted">
-              Follow us on social media for updates.
+              Subscribe to our newsletter for insights.
             </Text>
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <FloatingInput
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubscribing}
+                className="flex-1"
+              />
+              <Button
+                type="submit"
+                size="icon"
+                variant="default"
+                className="flex-shrink-0"
+                aria-label="Subscribe to newsletter"
+                disabled={isSubscribing}
+              >
+                <Send className="w-4 h-4" aria-hidden="true" />
+              </Button>
+            </form>
             {socialLinks.length > 0 ? (
               <div className="flex gap-3">
                 {socialLinks.map(({ name, url, Icon }) => (
@@ -144,6 +201,7 @@ export function Footer() {
           </div>
         </div>
       </Container>
-    </footer>
+      </footer>
+    </>
   );
 }
