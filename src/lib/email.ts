@@ -3,15 +3,15 @@ import nodemailer from "nodemailer";
 function getTransport() {
   const user = process.env.GMAIL_EMAIL;
   const pass = process.env.GMAIL_APP_PASSWORD;
-
+  console.log(user , pass)
   if (!user || !pass) {
     throw new Error("GMAIL_EMAIL and GMAIL_APP_PASSWORD must be set");
   }
 
   return nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: { user, pass },
   });
 }
@@ -32,8 +32,8 @@ export async function sendContactNotification(data: {
   await transport.sendMail({
     from: getFromAddress(),
     // FOR TESTING ONLY REMOVED IN PRODUCTION
-    to: "bluehawk1711@gmail.com",
-    // to: getFromAddress(),
+    // to: "bluehawk1711@gmail.com",
+    to: getFromAddress(),
     replyTo: data.email,
     subject: `[Contact] ${data.subject}`,
     html: `
